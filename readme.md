@@ -9,7 +9,6 @@ turning requirements into unit tests, then a working spring-boot microservice
     * Q: what about comments set to private?
 * Comment status can also be set to "Unaddressed / Addressed and Resolved".
 * Unaddressed comments need to be addressed by researchers.
-    *
-* When submission is sent back to research team with unaddressed comments, research team needs to address them all before sending submission back to IACUC office.
+    * When submission is sent back to research team with unaddressed comments, research team needs to address them all before sending submission back to IACUC office.
     * (researchers will be able to set status of the comment from "Unaddressed" to "Addressed" and vice-versa).
 

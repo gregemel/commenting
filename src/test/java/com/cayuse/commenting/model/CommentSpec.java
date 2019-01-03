@@ -13,16 +13,18 @@ public class CommentSpec {
 
     @Test
     public void shouldBeAbleToSetVisibleToPrivate() {
-        Comment target = new Comment();
+        Researcher researcher = new Researcher();
+        Comment target = Comment.create(researcher, "");
 
-        target.setVisibility(Private);
+        target.setVisibility(Researchers);
 
-        assert(target.getVisibility() == Private);
+        assert(target.getVisibility() == Researchers);
     }
 
     @Test
     public void shouldBeAbleToSetVisibleToEveryone() {
-        Comment target = new Comment();
+        Researcher researcher = new Researcher();
+        Comment target = Comment.create(researcher, "");
 
         target.setVisibility(Everyone);
 
@@ -31,14 +33,16 @@ public class CommentSpec {
 
     @Test
     public void shouldSetStatusToGeneralByDefault() {
-        Comment target = new Comment();
+        Researcher researcher = new Researcher();
+        Comment target = Comment.create(researcher, "");
 
         assert(target.getStatus() == General);
     }
 
     @Test
     public void shouldBeAbleToSetStatusToUnaddressed() {
-        Comment target = new Comment();
+        Researcher researcher = new Researcher();
+        Comment target = Comment.create(researcher, "");
 
         target.setStatus(Unaddressed);
 
@@ -46,7 +50,8 @@ public class CommentSpec {
     }
     @Test
     public void shouldBeAbleToSetStatusToAddressed() {
-        Comment target = new Comment();
+        Researcher researcher = new Researcher();
+        Comment target = Comment.create(researcher, "");
 
         target.setStatus(Addressed);
 
@@ -54,7 +59,8 @@ public class CommentSpec {
     }
     @Test
     public void shouldBeAbleToSetStatusToResolved() {
-        Comment target = new Comment();
+        Researcher researcher = new Researcher();
+        Comment target = Comment.create(researcher, "");
 
         target.setStatus(Resolved);
 
