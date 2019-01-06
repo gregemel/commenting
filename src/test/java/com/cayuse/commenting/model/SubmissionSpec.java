@@ -1,11 +1,18 @@
 package com.cayuse.commenting.model;
 
+import com.cayuse.commenting.model.Exceptions.ComplianceException;
+import com.cayuse.commenting.model.Exceptions.UnauthorizedException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static com.cayuse.commenting.model.Status.Addressed;
-import static com.cayuse.commenting.model.Status.Unaddressed;
+import java.util.UUID;
+
+import static com.cayuse.commenting.model.Comment.Status.Addressed;
+import static com.cayuse.commenting.model.Comment.Visibility.Everyone;
+import static com.cayuse.commenting.model.Comment.Status.Unaddressed;
+import static com.cayuse.commenting.model.Commenter.Role.Researcher;
+import static com.cayuse.commenting.model.Commenter.Role.Reviewer;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SubmissionSpec {
@@ -23,50 +30,48 @@ public class SubmissionSpec {
     @Test
     public void shouldBeAbleToAddResearchers() {
         Submission target = new Submission();
-        Researcher researcher = new Researcher();
+        Commenter researcher = Commenter.of(UUID.randomUUID(), Researcher);
 
         target.addResearcher(researcher);
 
         assert(target.getResearchers().contains(researcher));
     }
 
-    @Test
-    public void shouldNotBeAbleToSubmitWithUnaddressedComments() {
+    @Test(expected = ComplianceException.class)
+    public void shouldNotBeAbleToSubmitWithUnaddressedComments() throws UnauthorizedException, ComplianceException {
         //setup
         Submission target = new Submission();
 
-        Researcher researcher = new Researcher();
-        target.addResearcher(researcher);
+        Commenter reviewer = Commenter.of(UUID.randomUUID(), Reviewer);
+//        target.addResearcher(reviewer);
 
         EformQuestion question = new EformQuestion();
-        Comment comment = Comment.create(researcher, "");
-        comment.setStatus(Unaddressed);
+        Comment comment = Comment.of(reviewer, "", Everyone, Unaddressed);
         question.addComment(comment);
         target.addQuestion(question);
 
         //execute
-        boolean success = target.submit();
+        target.submit();
 
-        assert(!success);
+        assert(false);  //should not get here
     }
 
     @Test
-    public void shouldBeAbleToSubmitWithNoUnaddressedComments() {
+    public void shouldBeAbleToSubmitWithNoUnaddressedComments() throws UnauthorizedException, ComplianceException {
         //setup
         Submission target = new Submission();
 
-        Researcher researcher = new Researcher();
+        Commenter researcher = Commenter.of(UUID.randomUUID(), Researcher);
         target.addResearcher(researcher);
 
         EformQuestion question = new EformQuestion();
-        Comment comment = Comment.create(researcher, "");
-        comment.setStatus(Addressed);
+        Comment comment = Comment.of(researcher, "", Everyone, Addressed);
         question.addComment(comment);
         target.addQuestion(question);
 
         //execute
-        boolean success = target.submit();
+        target.submit();
 
-        assert(success);
+        assert(true);
     }
 }
