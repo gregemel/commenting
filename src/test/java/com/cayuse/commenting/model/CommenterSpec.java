@@ -29,9 +29,6 @@ public class CommenterSpec {
      * Researcher can edit own Comments
      * */
 
-
-
-
     @Test(expected = UnauthorizedException.class)
     public void shouldNotBeAbleToSetStatusToResolvedAsResearcher() throws UnauthorizedException {
         Commenter reviewer = Commenter.of(UUID.randomUUID(), Commenter.Role.Reviewer);
@@ -42,7 +39,6 @@ public class CommenterSpec {
 
         assert(false); //should not get here
     }
-
 
     //Reviewer should be able to set Visibility on Comment to ReviewersOnly, Everyone.
     @Test
@@ -128,7 +124,4 @@ public class CommenterSpec {
 
         assert(false); //should not get here
     }
-
-
-
 }

@@ -43,7 +43,6 @@ public class SubmissionSpec {
         Submission target = new Submission();
 
         Commenter reviewer = Commenter.of(UUID.randomUUID(), Reviewer);
-//        target.addResearcher(reviewer);
 
         EformQuestion question = new EformQuestion();
         Comment comment = Comment.of(reviewer, "", Everyone, Unaddressed);

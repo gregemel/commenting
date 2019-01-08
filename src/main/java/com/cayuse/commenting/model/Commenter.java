@@ -27,23 +27,23 @@ public class Commenter {
         return commenter;
     }
 
-    void addComment(EformQuestion question, Comment comment) {
-        question.addComment(comment);
-    }
     boolean isReviewer() {
         return role == Role.Reviewer;
     }
+
     boolean isAnalyst() {
         return role == Role.Analyst;
     }
+
     boolean isAdmin() {
         return role == Role.Admin;
     }
+
     boolean isAuthor(Comment comment) {
         return isEqual(comment.getAuthor());
     }
+
     boolean isEqual(Commenter commenter) {
         return userId == commenter.getUserId();
     }
 }
-

@@ -5,10 +5,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static com.cayuse.commenting.model.Comment.Status.*;
-//import static com.cayuse.commenting.model.Status.*;
+import static java.lang.Thread.sleep;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -35,7 +36,7 @@ public class CommentSpec {
     }
 
     @Test
-    public void shouldBeAbleToSetStatusToUnaddressed() throws UnauthorizedException {
+    public void reviewerShouldBeAbleToSetStatusToUnaddressed() throws UnauthorizedException {
         Commenter reviewer = Commenter.of(UUID.randomUUID(), Commenter.Role.Reviewer);
         Comment target = Comment.of(reviewer, "needs work");
 
@@ -44,9 +45,19 @@ public class CommentSpec {
         assert(target.getStatus() == Unaddressed);
     }
 
+    @Test(expected = UnauthorizedException.class)
+    public void researcherShouldNotBeAbleToSetStatusToUnaddressed() throws UnauthorizedException {
+        Commenter reviewer = Commenter.of(UUID.randomUUID(), Commenter.Role.Researcher);
+        Comment target = Comment.of(reviewer, "needs work");
+
+        target.setStatus(reviewer, Unaddressed);
+
+        assert(false);  //should never get here
+    }
+
     @Test
     public void shouldBeAbleToSetStatusToAddressed() throws UnauthorizedException {
-        Commenter researcher = Commenter.of(UUID.randomUUID(), Commenter.Role.Reviewer);
+        Commenter researcher = Commenter.of(UUID.randomUUID(), Commenter.Role.Researcher);
         Comment target = Comment.of(researcher, "a comment");
 
         target.setStatus(researcher, Addressed);
@@ -54,4 +65,73 @@ public class CommentSpec {
         assert(target.getStatus() == Addressed);
     }
 
+    @Test
+    public void shouldBeAbleToSetStatusToResolve() throws UnauthorizedException {
+        Commenter researcher = Commenter.of(UUID.randomUUID(), Commenter.Role.Reviewer);
+        Comment target = Comment.of(researcher, "a comment");
+
+        target.setStatus(researcher, Resolved);
+
+        assert(target.getStatus() == Resolved);
+    }
+
+    @Test(expected = UnauthorizedException.class)
+    public void researcherShouldNotBeAbleToSetStatusToResolved() throws UnauthorizedException {
+        Commenter researcher = Commenter.of(UUID.randomUUID(), Commenter.Role.Researcher);
+        Comment target = Comment.of(researcher, "needs work");
+
+        target.setStatus(researcher, Resolved);
+
+        assert(false);  //should never get here
+    }
+
+    @Test
+    public void shouldBeAbleToEditOwnComment() throws UnauthorizedException {
+        Commenter researcher = Commenter.of(UUID.randomUUID(), Commenter.Role.Researcher);
+        Comment target = Comment.of(researcher, "needs work");
+
+
+        String change = "different text";
+        target.setComment(researcher, change);
+
+        assert(target.getComment().equals(change));
+
+    }
+
+    @Test(expected = UnauthorizedException.class)
+    public void shouldNoBeAbleToEditAnothersComment() throws UnauthorizedException {
+        Commenter researcher = Commenter.of(UUID.randomUUID(), Commenter.Role.Researcher);
+        Comment target = Comment.of(researcher, "needs work");
+        Commenter changer = Commenter.of(UUID.randomUUID(), Commenter.Role.Researcher);
+
+
+        String change = "different text";
+        target.setComment(changer, change);
+
+        assert(false);
+    }
+
+    @Test
+    public void shouldUpdateTimeStampOnEdit() throws UnauthorizedException, InterruptedException {
+        Commenter researcher = Commenter.of(UUID.randomUUID(), Commenter.Role.Researcher);
+        Comment target = Comment.of(researcher, "needs work");
+        LocalDateTime timeStamp = target.getTimeStamp();
+        sleep(100);
+
+        target.setComment(researcher, "different text");
+
+        assert(timeStamp != target.getTimeStamp());
+    }
+
+    @Test
+    public void changingCommentShouldUpdateEditFlag() throws UnauthorizedException, InterruptedException {
+        Commenter researcher = Commenter.of(UUID.randomUUID(), Commenter.Role.Researcher);
+        Comment target = Comment.of(researcher, "needs work");
+
+        assert(!target.isEdited());
+
+        target.setComment(researcher, "different text");
+
+        assert(target.isEdited());
+    }
 }

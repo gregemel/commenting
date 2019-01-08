@@ -32,7 +32,5 @@ public class EformQuestionSpec {
         target.addComment(comment);
 
         assert(target.getComments().contains(comment));
-
     }
-
 }

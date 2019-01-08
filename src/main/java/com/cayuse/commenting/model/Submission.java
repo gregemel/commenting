@@ -24,7 +24,6 @@ class Submission {
     void submit() throws ComplianceException {
         if(hasUnaddressedComments())
             throw new ComplianceException("Submission still has unaddressed comment(s) on question(s).");
-        //
     }
 
     private boolean hasUnaddressedComments() {
