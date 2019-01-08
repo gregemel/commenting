@@ -49,7 +49,7 @@ public class Comment {
 
     public void setComment(Commenter changer, String text) throws UnauthorizedException {
         if(!changer.isAuthor(this))
-            throw new UnauthorizedException(String.format("%s cannot comment by %s", changer.getUserId(), getAuthor().getUserId()));
+            throw new UnauthorizedException(String.format("%s cannot edit comment by %s", changer.getUserId(), getAuthor().getUserId()));
 
         this.timeStamp = LocalDateTime.now();
         this.edited = true;
@@ -62,7 +62,7 @@ public class Comment {
 
     void setVisibility(Commenter changer, Visibility visibility) throws UnauthorizedException {
         if(!getAuthor().isReviewer() && visibility == Visibility.ReviewersOnly)
-            throw new UnauthorizedException("Only Reviewer can set visibility to Reviewers Only");
+            throw new UnauthorizedException("Only Reviewer can set visibility to Reviewers-Only");
         if(!changer.isAuthor(this) && !changer.isAdmin() && !changer.isAnalyst())
             throw new UnauthorizedException("Only original author, admin, or analyst can change visibility.");
         this.visibility = visibility;

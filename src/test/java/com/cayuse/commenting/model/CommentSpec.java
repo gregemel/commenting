@@ -66,7 +66,7 @@ public class CommentSpec {
     }
 
     @Test
-    public void shouldBeAbleToSetStatusToResolve() throws UnauthorizedException {
+    public void shouldBeAbleToSetStatusToResolved() throws UnauthorizedException {
         Commenter researcher = Commenter.of(UUID.randomUUID(), Commenter.Role.Reviewer);
         Comment target = Comment.of(researcher, "a comment");
 
@@ -90,12 +90,10 @@ public class CommentSpec {
         Commenter researcher = Commenter.of(UUID.randomUUID(), Commenter.Role.Researcher);
         Comment target = Comment.of(researcher, "needs work");
 
-
         String change = "different text";
         target.setComment(researcher, change);
 
         assert(target.getComment().equals(change));
-
     }
 
     @Test(expected = UnauthorizedException.class)
@@ -124,7 +122,7 @@ public class CommentSpec {
     }
 
     @Test
-    public void changingCommentShouldUpdateEditFlag() throws UnauthorizedException, InterruptedException {
+    public void changingCommentShouldUpdateEditFlag() throws UnauthorizedException {
         Commenter researcher = Commenter.of(UUID.randomUUID(), Commenter.Role.Researcher);
         Comment target = Comment.of(researcher, "needs work");
 
