@@ -28,7 +28,7 @@ public class SubmissionSpec {
         question.addComment(comment);
 
         //execute
-        target.submit();
+        target.submit(reviewer);
 
         assert(false);  //should not get here
     }
@@ -44,7 +44,7 @@ public class SubmissionSpec {
         question.addComment(comment);
 
         //execute
-        target.submit();
+        target.submit(researcher);
 
         assert(true);
     }

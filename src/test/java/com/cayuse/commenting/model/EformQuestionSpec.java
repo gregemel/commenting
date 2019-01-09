@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.List;
 import java.util.UUID;
 
 import static com.cayuse.commenting.model.Submission.Status.*;
@@ -24,7 +25,7 @@ public class EformQuestionSpec {
 
         target.addComment(comment);
 
-        assert(target.getComments().contains(comment));
+        assert(target.getComments(reviewer).contains(comment));
     }
 
     //  * Reviewers can add Comment to Questions until the Submission is closed, approved.
@@ -54,5 +55,19 @@ public class EformQuestionSpec {
         target.addComment(comment);
 
         assert(false);      //should not get here
+    }
+
+    @Test
+    public void shouldBeAbleToGetCommentsOnEformQuestion() throws UnauthorizedException, ComplianceException {
+        Submission submission = Submission.of(Open);
+        EformQuestion target = EformQuestion.of(submission);
+        Commenter reviewer = Commenter.of(UUID.randomUUID(), Commenter.Role.Reviewer);
+        Comment comment = Comment.of(reviewer, "reviewer comment");
+        target.addComment(comment);
+        submission.addQuestion(target);
+
+        List<Comment> comments = target.getComments(reviewer);
+
+        assert(comments.size() == 1);
     }
 }

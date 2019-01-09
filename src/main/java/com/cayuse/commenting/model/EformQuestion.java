@@ -23,7 +23,7 @@ class EformQuestion {
 
     private List<Comment> comments = new ArrayList<>();
 
-    List<Comment> getComments() {
+    List<Comment> getComments(Commenter viewer) {
         return comments;
     }
 

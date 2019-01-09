@@ -35,16 +35,16 @@ class Submission {
         questions.add(question);
     }
 
-    void submit() throws ComplianceException {
-        if(hasUnaddressedComments())
+    void submit(Commenter submitter) throws ComplianceException {
+        if(hasUnaddressedComments(submitter))
             throw new ComplianceException("Submission still has unaddressed comment(s) on question(s).");
     }
 
-    private boolean hasUnaddressedComments() {
+    private boolean hasUnaddressedComments(Commenter submitter) {
 
         //todo: stream map these
         for (EformQuestion question: questions) {
-            for (Comment comment: question.getComments()) {
+            for (Comment comment: question.getComments(submitter)) {
                 if (comment.getStatus() == Comment.Status.Unaddressed)
                     return true;
             }
