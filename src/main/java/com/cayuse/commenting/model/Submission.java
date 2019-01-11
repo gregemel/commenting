@@ -41,19 +41,12 @@ class Submission {
     }
 
     private boolean hasUnaddressedComments(Commenter submitter) {
-
-        //todo: stream map these
-        for (EformQuestion question: questions) {
-            for (Comment comment: question.getComments(submitter)) {
-                if (comment.getStatus() == Comment.Status.Unaddressed)
-                    return true;
-            }
-        }
-        return false;
+        return questions.stream().flatMap(
+                question -> question.getComments(submitter).stream()).anyMatch(
+                        comment -> comment.getStatus() == Comment.Status.Unaddressed);
     }
-
-    enum Status {Open, Closed, Approved}
 
     @Getter @Setter
     private Status status;
+    enum Status {Open, Closed, Approved}
 }
